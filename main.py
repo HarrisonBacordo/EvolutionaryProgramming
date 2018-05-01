@@ -1,5 +1,4 @@
 import numpy as np
-import deap as dp
 import NeuralNetwork as nn
 import csv
 
