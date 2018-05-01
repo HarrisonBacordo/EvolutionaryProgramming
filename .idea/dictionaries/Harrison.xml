@@ -3,6 +3,8 @@
     <words>
       <w>fname</w>
       <w>indx</w>
+      <w>mstats</w>
+      <w>pset</w>
     </words>
   </dictionary>
 </component>
