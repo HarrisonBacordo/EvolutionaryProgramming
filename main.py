@@ -20,10 +20,10 @@ def process_data(file):
 
 
 features, labels = process_data(fname)
-# indx = np.random.permutation(len(features))
-# features, labels = features[indx], labels[indx]
+for i in range(10):
+    indx = np.random.permutation(len(features))
+    features = np.vstack((features, features[indx]))
+    labels = np.hstack((labels, labels[indx]))
 labels = nn.one_hot(labels)
-net = nn.NeuralNetwork([4, 12, 3], "sigmoid")
-net.train(features, labels, 1)
-for i in range(1000):
-    net.train(features, labels, 1000)
+net = nn.NeuralNetwork([4, 5, 3], "sigmoid")
+net.train(features, labels, 1000)
