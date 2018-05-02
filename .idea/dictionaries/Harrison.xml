@@ -3,8 +3,13 @@
     <words>
       <w>fname</w>
       <w>indx</w>
+      <w>initfeats</w>
+      <w>initlabels</w>
+      <w>labls</w>
       <w>mstats</w>
+      <w>numcorrect</w>
       <w>pset</w>
+      <w>testlabels</w>
     </words>
   </dictionary>
 </component>

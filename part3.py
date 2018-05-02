@@ -1,4 +1,5 @@
 import operator
+import NeuralNetwork
 import random
 import math
 import itertools
@@ -92,6 +93,9 @@ def if_then_else(input, output1, output2):
 
 
 pset.addPrimitive(operator.lt, [float, float], bool)
+pset.addPrimitive(operator.le, [float, float], bool)
+pset.addPrimitive(operator.gt, [float, float], bool)
+pset.addPrimitive(operator.ge, [float, float], bool)
 pset.addPrimitive(operator.eq, [float, float], bool)
 pset.addPrimitive(if_then_else, [bool, float, float], float)
 
@@ -133,7 +137,7 @@ def main(datafile):
     hof = tools.HallOfFame(1)
 
     # execute algorithm and print out results
-    pop, log = algorithms.eaSimple(pop, toolbox, 0.5, 0.2, 100, stats=mstats,
+    pop, log = algorithms.eaSimple(pop, toolbox, 1, 0.65, 300, stats=mstats,
                                    halloffame=hof, verbose=True)
     print("\n\n" + str(hof.keys[0]) + "-->" + str(hof.items[0]))
     return pop, mstats, hof

@@ -1,7 +1,6 @@
 import numpy as np
 
 
-# TODO Implement SGD
 class NeuralNetwork:
     def __init__(self, structure, activation):
         """
@@ -14,6 +13,7 @@ class NeuralNetwork:
         self.structure = structure
         self.bias = list()
         self.nn = list()
+        self.activation = activation
         for i in range(len(self.structure) - 1):
             self.nn.append(np.random.uniform(-1, 1, (self.structure[i+1], self.structure[i])))
             self.bias.append(np.ones(self.structure[i+1])[:, None])
@@ -35,8 +35,9 @@ class NeuralNetwork:
             # calculate cost and compute the gradient
             if self.structure[-1] != 1:
                 labels[i] = labels[i][:, None]
-            cost = np.atleast_2d(np.power(np.subtract(guess, labels[i]), 2))
-            print("\n\nACTUAL: \n", labels[i], "\nGUESS\n", guess, "\nCOST: ", cost)
+            cost = np.atleast_2d(np.subtract(labels[i], guess))
+            obj_cost = np.mean(np.abs(cost))
+            # print("\n\nACTUAL: \n", labels[i], "\nGUESS\n", guess, "\nCOST: ", obj_cost)
             self.compute_gradient(cost, states)
 
     def feed_forward(self, features):
@@ -82,7 +83,6 @@ class NeuralNetwork:
         # multiply the output gradient by the transposed hidden layer.
         # This is the change to be applied to the output weights.
         weight_ho_deltas = np.dot(ogradient, hidden_t)
-        # print("HIDDEN -> OUTPUT: \n", weight_ho_deltas, "\n")
 
         self.bias[-1] = np.add(self.bias[-1], ogradient)
         self.nn[-1] = np.add(self.nn[-1], weight_ho_deltas)
@@ -112,15 +112,22 @@ class NeuralNetwork:
             # multiply this layer's gradients by the transposed <- layer
             # This is the change to be applied to this layer's weights.
             weight_hh_deltas = np.dot(hgradients, hidden_t)
-            # print("INPUT -> HIDDEN: \n", weight_hh_deltas)
             self.bias[i] = np.add(self.bias[i], hgradients)
             self.nn[i] = np.add(self.nn[i], weight_hh_deltas)
             hcount -= 1
 
-    @staticmethod
-    def compute_error(costs, weights):
-        who_t = np.transpose(weights)
-        return np.dot(who_t, costs)
+    def test(self, features, labels):
+        _sum = 0
+        obj_cost = 0
+        for i, feature in enumerate(features):
+            guess, _ = self.feed_forward(feature)
+            if np.argmax(guess) == list(labels[i]).index(1):
+                _sum += 1
+            cost = np.subtract(labels[i][:, None], guess)
+            obj_cost += np.mean(np.abs(cost))
+        print("---------TEST SUMMARY----------")
+        print("NUMBER CORRECT: ",  _sum, "OUT OF", len(features))
+        print("AVERAGE COST: ", obj_cost/len(features))
 
 
 def sigmoid(x):
@@ -130,8 +137,6 @@ def sigmoid(x):
     :return: result from sigmoid calculation
     """
     return 1 / (1 + np.exp(-x))
-
-
 
 
 def derivsig(y):
@@ -158,3 +163,19 @@ def one_hot(labels):
         onehot[unique.index(label)] = 1
         one_hots.append(onehot)
     return one_hots
+
+
+def shuffle(features, labels):
+    indx = np.random.permutation(len(features))
+    return features[indx], labels[indx]
+
+
+def clone_and_shuffle(features, labels, cycles):
+    feats = features
+    labls = labels
+
+    for i in range(cycles):
+        indx = np.random.permutation(len(feats))
+        feats = np.vstack((feats, feats[indx]))
+        labls = np.hstack((labls, labls[indx]))
+    return feats, labls

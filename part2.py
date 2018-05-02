@@ -72,8 +72,6 @@ pset.addPrimitive(operator.mul, 2)
 pset.addPrimitive(operator.neg, 1)
 pset.addPrimitive(protected_div, 2)
 pset.addPrimitive(square, 1)
-pset.addPrimitive(math.cos, 1)
-pset.addPrimitive(math.sin, 1)
 pset.addEphemeralConstant("rand101", lambda: random.randint(-11, 11))
 
 
@@ -107,7 +105,7 @@ def main(datafile):
     hof = tools.HallOfFame(1)
 
     # execute algorithm and print out results
-    pop, log = algorithms.eaSimple(pop, toolbox, 1, 0.05, 100, stats=mstats,
+    pop, log = algorithms.eaSimple(pop, toolbox, 0.8, 0.1, 300, stats=mstats,
                                    halloffame=hof, verbose=True)
     print("\n\n" + str(hof.keys[0]) + "-->" + str(hof.items[0]))
     return pop, mstats, hof
