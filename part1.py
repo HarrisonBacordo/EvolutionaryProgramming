@@ -14,16 +14,15 @@ def process_data(file):
             if line:
                 feats.append(line[:-1])
                 labls.append(line[-1])
-        print(feats)
-        print(labls)
         return np.array(feats).astype(float), np.array(labls)
 
 
-features, labels = process_data(fname)
-for i in range(10):
-    indx = np.random.permutation(len(features))
-    features = np.vstack((features, features[indx]))
-    labels = np.hstack((labels, labels[indx]))
-labels = nn.one_hot(labels)
-net = nn.NeuralNetwork([4, 5, 3], "sigmoid")
-net.train(features, labels, 1000)
+initfeats, initlabels = process_data(fname)
+for i in range(8):
+    print("\n\nITER ", i+1)
+    testlabels = nn.one_hot(initlabels)
+    features, labels = nn.clone_and_shuffle(initfeats, initlabels, 7)
+    labels = nn.one_hot(labels)
+    net = nn.NeuralNetwork([4, 5, 3], "sigmoid")
+    net.train(features, labels, 1000)
+    net.test(initfeats, testlabels)
