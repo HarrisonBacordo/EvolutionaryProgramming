@@ -2,7 +2,7 @@ import numpy as np
 import NeuralNetwork as nn
 import csv
 
-fname = 'ass2DataFiles/part1/iris.data'
+fname = '../ass2DataFiles/part1/iris.data'
 
 
 def process_data(file):
@@ -24,5 +24,5 @@ for i in range(8):
     features, labels = nn.clone_and_shuffle(initfeats, initlabels, 7)
     labels = nn.one_hot(labels)
     net = nn.NeuralNetwork([4, 5, 3], "sigmoid")
-    net.train(features, labels, 1000)
+    net.train(features, labels, 1000, momentum=0.8, learning_rate=0.05)
     net.test(initfeats, testlabels)
