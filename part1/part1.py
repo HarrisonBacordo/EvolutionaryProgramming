@@ -19,7 +19,7 @@ def process_data(file):
 
 initfeats, initlabels = process_data(fname)
 for i in range(8):
-    print("\n\nITER ", i+1)
+    print("\n\nITR ", i+1)
     testlabels = nn.one_hot(initlabels)
     features, labels = nn.clone_and_shuffle(initfeats, initlabels, 7)
     labels = nn.one_hot(labels)
